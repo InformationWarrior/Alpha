@@ -115,3 +115,27 @@ Returns the cleaned and modified object.
 This is particularly useful when sending data to a client, as it simplifies the output by removing unnecessary internal fields and providing a more readable id field.
 
  */
+
+//****************************************************//
+
+/** 
+ * TutorialSchema.method("toJSON", function () {
+  const { __v, _id, ...object } = this.toObject();
+  object.id = _id;
+  return object;
+});
+
+Destructuring with { __v, _id, ...object }:
+__v: This is the version key, automatically added by Mongoose to track document revisions. By including __v in the destructuring, the code effectively "picks" the __v property and discards it.
+_id: This is the unique identifier for the document. The destructuring picks the _id property and assigns it separately.
+...object: This collects the rest of the properties (excluding __v and _id) into a new object.
+
+object.id = _id;:
+The code then adds the _id value back to the object but assigns it to a new key called id. This renames _id to id for clarity or consistency with frontend naming conventions.
+
+Return object:
+Finally, the method returns the modified object, which now contains all properties except for __v, and the _id has been renamed to id.
+
+How it Discards __v
+The __v property is discarded because it is explicitly extracted in the destructuring assignment and is not included in the object that is returned. This effectively removes it from the final JSON output when the document is serialized.
+*/
