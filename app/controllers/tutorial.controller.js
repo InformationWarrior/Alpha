@@ -46,14 +46,14 @@ const findAll = async (req, res) => {
 
 // Find a single Tutorial with an id
 const findOne = async (req, res) => {
-  const {id} = req.params;
+  const { id } = req.params;
   try {
     const data = await Tutorial.findById(id);
     if (!data)
       res.status(404).json({
         message: `Not found tutorial with id - ${id}`,
       });
-    else res.status(200).json(data);
+    else res.status(200).send(data);
   } catch (error) {
     res.status(500).json({
       message: error.message || `Error retrieving tutorial with id ${id}`,
@@ -68,7 +68,7 @@ const update = async (req, res) => {
     });
   }
 
-  const {id} = req.params;
+  const { id } = req.params;
 
   try {
     const data = await Tutorial.findByIdAndUpdate(id, req.body, {
@@ -89,10 +89,10 @@ const update = async (req, res) => {
 
 // Delete a Tutorial with the specified id in the request
 const deleteTutorial = async (req, res) => {
-  const {id} = req.params
+  const { id } = req.params
   try {
     const data = await Tutorial.findByIdAndRemove(id, {
-      useFindAndModify: false,
+      useFindAndModify: false
     });
     if (!data) {
       res.status(404).send({
@@ -161,7 +161,7 @@ Model Importation: By importing the model, you gain access to the Mongoose schem
 Usage: You can use the Tutorial model to perform CRUD operations and other database queries. For example, you can create new documents, find existing ones, update them, or delete them.
 Example Context:
 
-In the provided code, the Tutorial model is used in various controller methods (like create, findAll, findOne, etc.) to interact with the database. This import is essential for these methods to function correctly. 
+In the provided code, the Tutorial model is used in various controller methods (like create, findAll, findOne, etc.) to interact with the database. This import is essential for these methods to function correctly.
  */
 
 //****************************************************//
@@ -182,11 +182,11 @@ In the routing file (e.g., tutorial.routes.js), these exported functions are req
 
 //****************************************************//
 
-/** 
+/**
 if (!req.body.title) {
   res.status(400).send({ message: "Content can not be empty!" });
   return;
-} 
+}
   The function first checks if the title field is present in the request body (req.body.title).
 If the title is missing, it responds with a 400 Bad Request status and a message indicating that the content cannot be empty.
 The return statement is used to exit the function early, so no further processing is done if the title is missing.
@@ -202,7 +202,7 @@ res.json(): Specifically used to send a JSON response. It is more explicit and i
 //****************************************************//
 
 /** FindAll method.
- * 
+ *
 const title = req.query.title;
   var condition = title
     ? { title: { $regex: new RegExp(title), $options: "i" } }
@@ -238,7 +238,7 @@ The findAndModify() function is deprecated in MongoDB, so setting this option to
 //****************************************************//
 
 /** Mongoose CRUD methods
- * 
+ *
  Here are the main Mongoose methods used to perform CRUD operations on a MongoDB database:
 
 Create
