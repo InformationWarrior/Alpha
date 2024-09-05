@@ -1,14 +1,13 @@
-const express = require("express");
-const cors = require("cors");
+const express = require("express"); //Q1
+const cors = require("cors"); //Q2
 const tutorialRoute = require("./app/routes/tutorial.routes");
 const dbConnect = require("./app/config/dbConnect");
 
 const app = express();
-
 dbConnect();
 
 var corsOptions = {
-  origin: "*",
+  origin: "*"
 };
 
 app.use(cors(corsOptions));
@@ -37,7 +36,7 @@ module.exports = app;
 //****************************************************//
 
 /** Q1 const app = express();
- * The line const app = express(); is a key part of setting up an Express.js application. Here’s a detailed explanation of what it does:
+ * The line const app = express(); is a key part of setting up an Express.js application.
 
 1. What is Express?
 Express.js is a minimal and flexible Node.js web application framework that provides a robust set of features for web and mobile applications.
@@ -50,7 +49,7 @@ When you call express(), it returns an instance of an Express application, typic
 3. Purpose of app:
 The app object represents your Express application and is the central object for configuring and running the server.
 Through the app object, you can:
-Define routes that specify how your server should respond to different HTTP requests (GET, POST, PUT, DELETE, etc.).
+Define routes that specify how your server should respond to different HTTP requests (GET, POST, PUT, PATCH, DELETE, etc.).
 Apply middleware functions to modify the request and response objects, log information, handle errors, and more.
 Set up the server to listen on a specific port and handle incoming requests.
 
@@ -79,7 +78,7 @@ This app object is the central point of your Express application, enabling you t
 
 //****************************************************//
 
-/** Q2  
+/** Q2
 var corsOptions = {
   origin: "*",
 };
@@ -105,6 +104,7 @@ In this example, only requests coming from https://example.com would be allowed.
 
 3. app.use(cors(corsOptions));:
 app.use() is a method to apply middleware in an Express application. Middleware functions are executed in the order they are added, and they can modify the request and response objects or end the request-response cycle.
+
 cors(corsOptions):
 This is a middleware function provided by the cors package.
 By passing corsOptions to cors(), you configure the CORS middleware to apply the specified options to all incoming requests.
@@ -133,7 +133,7 @@ app.use(cors(corsOptions));: Applies the CORS middleware to your Express applica
 
 //****************************************************//
 
-/** Q3 
+/** Q3
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
@@ -157,8 +157,9 @@ If a client sends a POST request with a JSON body like {"name": "John", "age": 3
 Purpose:
 This middleware is used to parse incoming requests with URL-encoded payloads, typically coming from HTML forms.
 It parses the application/x-www-form-urlencoded content-type.
-extended: true Explanation:
-
+extended: true
+ 
+Explanation:
 extended: true: Allows for rich objects and arrays to be encoded into the URL-encoded format using the qs library.
 Example: It allows nested objects, like {"user": {"name": "John", "age": 30}}, to be properly parsed into a JavaScript object.
 extended: false: Uses the querystring library, which does not support nested objects.
@@ -185,6 +186,32 @@ app.use(express.urlencoded({ extended: true }));: Parses incoming URL-encoded re
 These middlewares are commonly used in modern Express applications to handle different types of request payloads seamlessly.
 */
 
+//****************************************************//
+
+/** app.use()
+ * app.use() is a method in Express.js used to apply middleware functions or routes to your application. It allows you to define middleware that runs for every request, or for specific routes.
+
+Key points:
+Middleware: Functions that have access to the request (req), response (res), and next function in the request-response cycle.
+
+Routes: You can mount specific routes or route handlers.
+
+Syntax:
+app.use([path], middlewareFunction/Route);
+[path] (optional): The base path where the middleware or route should be applied. If omitted, it applies to all routes.
+middlewareFunction: The function or route that will be executed when the path matches.
+
+Example:
+// Applying middleware to all routes
+app.use((req, res, next) => {
+  console.log('A request was made');
+  next();
+});
+
+// Mounting routes for a specific path
+app.use("/api", apiRoutes);
+In summary, app.use() is a versatile method for applying middleware or mounting routes at any path within your Express.js app.
+*/
 //****************************************************//
 
 /** app.use()
@@ -264,11 +291,30 @@ app.use((err, req, res, next) => {
 });
 This middleware catches errors passed to next(err) and handles them, preventing them from crashing the server.
 
-
-
 6. Summary:
 app.use() is used to add middleware to an Express application.
 Middleware functions can be applied globally (to all routes) or to specific paths.
 Middleware can modify requests and responses, perform tasks like logging or authentication, and manage the flow of the request-response cycle by calling next().
 It's an essential part of structuring an Express application and managing complex request-handling logic.
+ */
+
+//=================================================
+
+/**How to define multiple domains in CORS options
+  
+  const allowedDomains = ["https://domain1.com", "https://domain2.com"];
+  
+  var corsOptions = {
+    origin: function (origin, callback) {
+    // If no origin (for example, in non-browser clients like Postman) or origin is in allowedDomains
+    if (!origin || allowedDomains.includes(origin)) {
+      // The origin is allowed, so we call the callback with `null` (no error) and `true`
+      callback(null, true);
+    } else {
+      // The origin is not allowed, so we pass an error to the callback
+      callback(new Error("Not allowed by CORS"));
+    }
+  },
+};
+
  */

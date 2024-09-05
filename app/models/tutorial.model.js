@@ -17,7 +17,7 @@ TutorialSchema.method("toJSON", function () {
 
 module.exports = new mongoose.model("tutorials", TutorialSchema);
 
-//****************************************************//
+//****************************************************
 
 /** File Flow
  * Importing Mongoose.
@@ -26,7 +26,7 @@ module.exports = new mongoose.model("tutorials", TutorialSchema);
  * Export Model to perform CRUD operations.
  */
 
-//****************************************************//
+/****************************************************/
 
 /**
  * Q1. Relation between database, collection, schema and models?
@@ -82,7 +82,7 @@ Models are the tools used to interact with the data in those collections based o
   return object;
 });
 
-This block of code defines a custom method toJSON for a Mongoose schema called TutorialSchema. This method customizes how Mongoose documents are converted to JSON. Let’s break it down step by step:
+This block of code defines a custom method toJSON for a Mongoose schema called TutorialSchema. This method customizes how Mongoose documents are converted to JSON.
 
 1. TutorialSchema.method("toJSON", function () {...}):
 What it does: This adds a custom instance method named toJSON to the schema. This method is automatically called whenever a document is converted to a JSON object (e.g., when sending a document as a response in an API).
@@ -139,3 +139,48 @@ Finally, the method returns the modified object, which now contains all properti
 How it Discards __v
 The __v property is discarded because it is explicitly extracted in the destructuring assignment and is not included in the object that is returned. This effectively removes it from the final JSON output when the document is serialized.
 */
+
+//=====================================================
+
+/** this.toObject()
+ * 
+ * The this.toObject() method is a Mongoose function that is used within Mongoose schemas to convert a Mongoose document into a plain JavaScript object. It removes Mongoose-specific properties and allows you to work with the data more easily.
+
+TutorialSchema.method("toJSON", function () {
+  const { __v, _id, ...object } = this.toObject();
+  object.id = _id;
+  return object;
+});
+
+this: Refers to the current Mongoose document (the document retrieved from the MongoDB collection).
+toObject(): Converts the Mongoose document into a plain JavaScript object. This is useful because Mongoose documents contain additional properties and methods (like _id, __v, etc.) that are specific to Mongoose and may not be needed when sending the object as a response, especially in JSON format.
+The toObject() method essentially strips away those Mongoose-specific functionalities and converts the document into a simpler object.
+
+Destructuring const { __v, _id, ...object } = this.toObject();:
+
+__v: This is the version key used by Mongoose for internal versioning of documents.
+_id: This is the default MongoDB document identifier.
+...object: The rest of the object is captured into the variable object, which contains all other fields of the document, excluding __v and _id.
+
+Returning the modified object:
+Finally, the function returns the modified object, now with id instead of _id and without the __v version field.
+
+Why use toObject() here?
+When you convert the Mongoose document to a plain object, you can then modify it (e.g., renaming _id to id) before it is sent to the client or processed further.
+In this case, you’re overriding the toJSON method so that when Mongoose serializes the document to JSON, it automatically excludes the __v field and renames _id to id.
+
+Example:
+Given a Mongoose document like this:
+
+{
+  "_id": "6123456789abcdef12345678",
+  "title": "Mongoose Tutorial",
+  "__v": 0
+}
+After the toJSON method is applied, the output will be:
+{
+  "id": "6123456789abcdef12345678",
+  "title": "Mongoose Tutorial"
+}
+This makes the output more readable and removes unnecessary fields.
+ */

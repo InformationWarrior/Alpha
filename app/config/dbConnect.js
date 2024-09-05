@@ -1,12 +1,11 @@
 require('dotenv').config();
 const mongoose = require("mongoose");
 const log = console.log;
-
-const url = process.env.DB_URL;
+const DB_URL = process.env.DB_URL;
 
 const dbConnect = async () => {
   try {
-    await mongoose.connect(url, {
+    await mongoose.connect(DB_URL, {
       useNewUrlParser: true,
       useUnifiedTopology: true,
     });
@@ -37,7 +36,7 @@ await mongoose.connect(url, {
       useUnifiedTopology: true,
     });
 
-This line of code is responsible for connecting your Node.js application to a MongoDB database using Mongoose. Let's break down what each part does:
+This line of code is responsible for connecting your Node.js application to a MongoDB database using Mongoose.
 
 1. await mongoose.connect(url, {...}):
 
@@ -147,9 +146,11 @@ Promise Methods:
 Attaches callbacks for the fulfillment and rejection cases.
 onFulfilled: Called when the promise is fulfilled, with the result as its argument.
 onRejected: Called when the promise is rejected, with the reason (error) as its argument.
+
 .catch(onRejected):
 Attaches a callback for only the rejection case.
 Essentially, it's a shorthand for .then(null, onRejected).
+
 .finally(onFinally):
 Attaches a callback that will be called when the promise is settled (fulfilled or rejected), regardless of the outcome.
 Useful for performing cleanup operations.
@@ -183,7 +184,7 @@ const fetchData = () => {
 
 fetchData()
   .then((data) => {
-    console.log("Data received:", data);
+    console.log("Data received:", JSON.stringify(data));
   })
   .catch((error) => {
     console.error("Error:", error);
